@@ -1483,12 +1483,6 @@
     semver "^6.3.0"
     uuid "^3.3.2"
 
-"@polymathnetwork/react@../polymath-react/":
-  version "0.1.0"
-  dependencies:
-    babel-cli "6"
-    babel-preset-react-app "3"
-
 "@polymathnetwork/react@https://github.com/PolymathNetwork/polymath-react":
   version "0.1.0"
   resolved "https://github.com/PolymathNetwork/polymath-react#904e66430e80d27efbe734113cfcfadcd5cc68bb"

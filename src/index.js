@@ -1,9 +1,9 @@
-import React, {createContext, useReducer} from 'react'
-import ReactDOM from 'react-dom'
-import './index.css'
-import App from './App'
-import rootReducer from './rootReducer'
-import * as serviceWorker from './serviceWorker'
+import React, { createContext, useReducer } from 'react';
+import ReactDOM from 'react-dom';
+import './index.css';
+import App from './App';
+import rootReducer from './rootReducer';
+import * as serviceWorker from './serviceWorker';
 
 const initialState = {
   AppReducer: {
@@ -11,18 +11,23 @@ const initialState = {
     loadingMessage: '',
     error: undefined,
     walletAddress: '',
-  }
-}
+    stos: null,
+  },
+};
 
-export const Store = createContext()
+export const Store = createContext();
 const WrappedApp = () => {
-  const store = useReducer(rootReducer, initialState)
-  return (<Store.Provider value={store}><App /></Store.Provider>)
-}
+  const store = useReducer(rootReducer, initialState);
+  return (
+    <Store.Provider value={store}>
+      <App />
+    </Store.Provider>
+  );
+};
 
-ReactDOM.render(<WrappedApp />, document.getElementById('root'))
+ReactDOM.render(<WrappedApp />, document.getElementById('root'));
 
 // If you want your app to work offline and load faster, you can change
 // unregister() to register() below. Note this comes with some pitfalls.
 // Learn more about service workers: https://bit.ly/CRA-PWA
-serviceWorker.unregister()
+serviceWorker.unregister();
