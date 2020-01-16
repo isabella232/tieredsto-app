@@ -1490,10 +1490,10 @@
     babel-cli "6"
     babel-preset-react-app "3"
 
-"@polymathnetwork/sdk@2.0.1-beta.91":
-  version "2.0.1-beta.91"
-  resolved "https://registry.yarnpkg.com/@polymathnetwork/sdk/-/sdk-2.0.1-beta.91.tgz#d056efd71ce40f8cad8b15ab68df4499907f26c2"
-  integrity sha512-RByBKpKpfDSNOJSaZga6EYqFTB3zmPh+kQsbS+UOh7wpo9nw/QD8VEciVbKExFpH5/kJ0f/jnZZMM18fBFmfiA==
+"@polymathnetwork/sdk@2.0.1-beta.95":
+  version "2.0.1-beta.95"
+  resolved "https://registry.yarnpkg.com/@polymathnetwork/sdk/-/sdk-2.0.1-beta.95.tgz#5d764b3c89175243d91d9063fd94e5494926a269"
+  integrity sha512-m1hS72w5/DIpU/nghKOG2SbNL/BtIxgd8/w0yA2BVWie8Sxn4otE5lzUuVw5EUzeUOZf6PrHuwj0DL4+430HCA==
   dependencies:
     "@0x/subproviders" "^3.0.2"
     "@babel/polyfill" "^7.0.0"
@@ -13270,6 +13270,11 @@ preserve@^0.2.0:
   version "0.2.0"
   resolved "https://registry.yarnpkg.com/preserve/-/preserve-0.2.0.tgz#815ed1f6ebc65926f865b310c0713bcb3315ce4b"
   integrity sha1-gV7R9uvGWSb4ZbMQwHE7yzMVzks=
+
+prettier@^1.19.1:
+  version "1.19.1"
+  resolved "https://registry.yarnpkg.com/prettier/-/prettier-1.19.1.tgz#f7d7f5ff8a9cd872a7be4ca142095956a60797cb"
+  integrity sha512-s7PoyDv/II1ObgQunCbB9PdLmUcBZcnWOcxDh7O0N/UwDEsHyqkW+Qh28jW+mVuCdx7gLB0BotYI1Y6uI9iyew==
 
 pretty-bytes@^5.1.0:
   version "5.3.0"

@@ -1,9 +1,9 @@
 import React, { Fragment } from 'react';
 import { Descriptions, Table } from 'antd';
 
+import { currencies } from './utils';
 const { Item } = Descriptions;
 
-const currencies = ['ETH', 'POLY', 'DAI'];
 const columns = [
   {
     title: 'Tokens on Sale',

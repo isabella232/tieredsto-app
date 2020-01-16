@@ -9,6 +9,7 @@ import { Layout, Spin, Alert } from 'antd';
 
 import { Store } from './index';
 import STO from './STO';
+import STOForm from './STOForm';
 
 const { Content, Header, Sider } = Layout;
 
@@ -46,7 +47,7 @@ export const reducer = (state, action) => {
         ...state,
         tokenIndex,
         error: undefined,
-        features: undefined,
+        stos: null,
       };
     default:
       throw new Error(`Unrecognized action type: ${action.type}`);
@@ -73,7 +74,7 @@ function App() {
     tokenIndex,
   } = useTokenSelector(sdk, walletAddress);
 
-  let { loading, loadingMessage, error, features, stos } = state.AppReducer;
+  let { loading, loadingMessage, error, stos } = state.AppReducer;
   const token = tokens[tokenIndex];
 
   error = error || sdkError || tokenSelectorError;
@@ -104,6 +105,18 @@ function App() {
       );
     }
   }, [token, stos]);
+
+  function launchSTO(params) {
+    async function launchSTO() {
+      console.log('Launching STO', params);
+      const queue = await token.issuance.offerings.launchTieredSto(params);
+      const ret = await queue.run();
+      console.log('LaunchSTO ret', ret);
+
+      dispatch({ type: 'TOKEN_SELECTED' });
+    }
+    asyncAction(dispatch, () => launchSTO(), 'Launching STO..');
+  }
 
   window.token = token;
   console.log(stos);
@@ -141,7 +154,9 @@ function App() {
                     justifyContent: 'flex-start',
                   }}
                 >
-                  {tokenSelector()}
+                  {tokenSelector({
+                    onTokenSelect: () => dispatch({ type: 'TOKEN_SELECTED' }),
+                  })}
                 </div>
               )}
             </Sider>
@@ -154,7 +169,9 @@ function App() {
               {error && (
                 <Alert message={error} type="error" closable showIcon />
               )}
-              {token && features && <div>{token.symbol}</div>}
+              {token && (
+                <STOForm walletAddress={walletAddress} launchSTO={launchSTO} />
+              )}
               {stos && stos.map(sto => <STO key={sto.address} {...sto} />)}
             </Content>
           </Layout>
