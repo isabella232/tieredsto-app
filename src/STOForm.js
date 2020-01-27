@@ -28,6 +28,8 @@ const formItemLayout = {
   },
 };
 
+const NONUSD = 3;
+
 const addressValidator = (rule, value, callback) => {
   if (value && !web3Utils.isAddress(value)) {
     callback('Address is invalid');
@@ -59,12 +61,14 @@ const addressValidator = (rule, value, callback) => {
  * @param allowPreIssuance whether to have all tokens issued on STO start. Default behavior is to issue on purchase
  */
 
-export default ({ walletAddress, launchSTO }) => {
+export default ({ walletAddress, launchSTO, network }) => {
   const { getFieldDecorator, validateFields, resetFields } = useForm();
   const [tiersCount, setTiersCount] = useState(1);
+  const [isUSD, setIsUSD] = useState(true);
+  const [denomination, setDenomination] = useState('USD');
   const tiersArray = [...Array(tiersCount).keys()];
   console.log('tiersArray', tiersCount, tiersArray);
-
+  console.log('Is USD', isUSD);
   const handleSubmit = async e => {
     e.preventDefault();
     const tierFields = [
@@ -84,24 +88,39 @@ export default ({ walletAddress, launchSTO }) => {
       'unsoldTokensWallet',
       'allowPreissuance',
     ];
+    if (!isUSD) {
+      fields.push('currency');
+      fields.push('stablecoinAddress');
+    }
     tiersArray.forEach(i => {
       fields.push(...tierFields.map(field => `${field}_${i}`));
     });
 
     // @TODO switch DAI address based on network
     // @TODO allow adding custom stable coins?
-    const stableCoinAddresses = ['0xc4375b7de8af5a38a93548eb8453a498222c4ff2'];
+    const usdStableCoinAddresses = [
+      '0xc4375b7de8af5a38a93548eb8453a498222c4ff2',
+    ];
 
     validateFields(fields, { force: true })
       .then(async values => {
-        values.currencies = [Number(values.currencies)];
-        values.stableCoinAddresses = stableCoinAddresses;
+        const currency = Number(values.currency);
+        // In case of Non-USD stablecoin, set fund-raise type to Stablecoin.
+        values.currencies = currency === NONUSD ? [2] : [currency];
+        values.stableCoinAddresses = isUSD
+          ? usdStableCoinAddresses
+          : [values.stablecoinAddress];
         values.startDate = values.startDate.toDate();
         values.endDate = values.endDate.toDate();
         values.minimumInvestment = new BigNumber(values.minimumInvestment);
         values.nonAccreditedInvestmentLimit = new BigNumber(
           values.nonAccreditedInvestmentLimit
         );
+        if (!isUSD) {
+          values.customCurrency = {
+            currencySymbol: denomination,
+          };
+        }
 
         values.tiers = [];
         tiersArray.forEach(tier => {
@@ -159,19 +178,58 @@ export default ({ walletAddress, launchSTO }) => {
           rules: [{ required: true }],
         })(<InputNumber />)}
       </Item>
-      <Item label="Fund-raise Currencies">
-        {getFieldDecorator('currencies', {
-          // @TODO remove
-          initialValue: 0,
+      <Item label="Fund-raise Currency">
+        {getFieldDecorator('currency', {
           rules: [{ required: true }],
         })(
-          <Select>
+          <Select
+            onChange={value => {
+              console.log('currency value', value);
+              if (value == NONUSD) {
+                setIsUSD(false);
+              } else {
+                setIsUSD(true);
+                setDenomination('USD');
+              }
+            }}
+          >
             {currencies.map((curr, i) => (
               <Option key={i}>{curr}</Option>
             ))}
           </Select>
         )}
       </Item>
+      {!isUSD && (
+        <Fragment>
+          <Item label="Currency Symbol">
+            {getFieldDecorator('denomination', {
+              rules: [
+                { required: true },
+                {
+                  pattern: /^[a-zA-Z]{3}$/,
+                  message:
+                    'Please enter a valid three character currency symbol.',
+                },
+              ],
+            })(
+              <Input
+                onChange={e => {
+                  console.log(e.target.value);
+                  if (RegExp(/^[a-zA-Z]{3}$/).test(e.target.value)) {
+                    setDenomination(e.target.value);
+                  }
+                }}
+              />
+            )}
+          </Item>
+          <Item label="Non-USD Stablecoin Address">
+            {getFieldDecorator('stablecoinAddress', {
+              rules: [{ required: true }, { validator: addressValidator }],
+            })(<Input />)}
+          </Item>
+        </Fragment>
+      )}
+
       <Item label="Raised Funds Wallet">
         {getFieldDecorator('raisedFundsWallet', {
           initialValue: walletAddress,
@@ -207,36 +265,54 @@ export default ({ walletAddress, launchSTO }) => {
        * @param tiers[].discountedPrice price of discounted tokens on that tier (defaults to 0)
        */}
 
-      {tiersArray.map(i => {
-        return (
-          <div style={{ display: 'flex', flexDirection: 'row' }} key={i}>
-            <Item>
-              {getFieldDecorator(`tokensOnSale_${i}`, {
-                // @TODO remove
-                initialValue: 5,
-                rules: [{ required: true }],
-              })(<InputNumber placeholder="Tokens on Sale" />)}
-            </Item>
-            <Item>
-              {getFieldDecorator(`price_${i}`, {
-                // @TODO remove
-                initialValue: 5,
-                rules: [{ required: true }],
-              })(<InputNumber placeholder="Price" />)}
-            </Item>
-            <Item>
-              {getFieldDecorator(`tokensWithDiscount_${i}`)(
-                <InputNumber placeholder="Tokens on Discount" />
-              )}
-            </Item>
-            <Item>
-              {getFieldDecorator(`discountedPrice_${i}`)(
-                <InputNumber placeholder="Discounted Price" />
-              )}
-            </Item>
-          </div>
-        );
-      })}
+      <table>
+        <tr>
+          <td>Tokens on Sale</td>
+          <td>Price</td>
+          <td>Discounted Tokens</td>
+          <td>Discounted Price</td>
+        </tr>
+        {tiersArray.map(i => {
+          return (
+            <tr>
+              {/* <div style={{ display: 'flex', flexDirection: 'row' }} key={i}> */}
+              <td>
+                {/* <Item label="Tokens on Sale"> */}
+                {getFieldDecorator(`tokensOnSale_${i}`, {
+                  // @TODO remove
+                  initialValue: 5,
+                  rules: [{ required: true }],
+                })(<InputNumber placeholder="Tokens on Sale" />)}
+                {/* </Item> */}
+              </td>
+              <td>
+                {/* <Item label="Price"> */}
+                {getFieldDecorator(`price_${i}`, {
+                  // @TODO remove
+                  initialValue: 5,
+                  rules: [{ required: true }],
+                })(<InputNumber placeholder="Price" />)}
+                {/* </Item> */}
+              </td>
+              <td>
+                {/* <Item label="Tokens on Discount"> */}
+                {getFieldDecorator(`tokensWithDiscount_${i}`)(
+                  <InputNumber placeholder="Tokens on Discount" />
+                )}
+                {/* </Item> */}
+              </td>
+              <td>
+                {/* <Item label="Price"> */}
+                {getFieldDecorator(`discountedPrice_${i}`)(
+                  <InputNumber placeholder="Discounted Price" />
+                )}
+                {/* </Item> */}
+              </td>
+              {/* </div> */}
+            </tr>
+          );
+        })}
+      </table>
 
       <Item
         wrapperCol={{

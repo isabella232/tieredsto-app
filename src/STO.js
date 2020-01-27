@@ -1,5 +1,6 @@
 import React, { Fragment } from 'react';
-import { Descriptions, Table } from 'antd';
+import { Descriptions, Table, Divider } from 'antd';
+import moment from 'moment';
 
 import { currencies } from './utils';
 const { Item } = Descriptions;
@@ -43,7 +44,8 @@ const columns = [
   },
 ];
 
-const formatDate = date => date.toString();
+const formatDate = date => moment(date).format('dddd, MMMM Do YYYY, h:mm:ss a');
+// @TODO url
 const formatUrl = url => url;
 const formatBN = bn => bn.toString();
 const formatCurrency = curr => currencies[curr];
@@ -103,12 +105,18 @@ export default ({
   });
   return (
     <Fragment>
-      <Descriptions column={1} size="small">
-        <Item label="Address">{formatUrl(address)}</Item>
-        <Item label="Start Date">{formatDate(startDate)}</Item>
-        <Item label="End Date">{formatDate(endDate)}</Item>
-        <Item label="Raised Funds Wallet">{formatUrl(raisedFundsWallet)}</Item>
-        <Item label="Unsold Tokens Amount">{formatBN(unsoldTokensWallet)}</Item>
+      <Descriptions style={{ textAlign: 'initial' }} column={2} size="small">
+        <Item label="Starts">{formatDate(startDate)}</Item>
+        <Item label="Ends">{formatDate(endDate)}</Item>
+        <Item label="Address" span={2}>
+          {formatUrl(address)}
+        </Item>
+        <Item label="Raised Funds Wallet" span={2}>
+          {formatUrl(raisedFundsWallet)}
+        </Item>
+        <Item label="Unsold Tokens Wallet" span={2}>
+          {formatUrl(unsoldTokensWallet)}
+        </Item>
         <Item label="Raised Amount">{formatBN(raisedAmount)}</Item>
         <Item label="Sold Tokens Amount">{formatBN(soldTokensAmount)}</Item>
         <Item label="Investor Count">{formatBN(investorCount)}</Item>
@@ -124,7 +132,15 @@ export default ({
         </Item>
         <Item label="Current Tier">{currentTier}</Item>
       </Descriptions>
-      <Table columns={columns} rowKey="key" dataSource={tiers} />
+      <h4>Tiers</h4>
+      <Table
+        size="small"
+        pagination={false}
+        columns={columns}
+        rowKey="key"
+        dataSource={tiers}
+      />
+      <Divider />
     </Fragment>
   );
 };

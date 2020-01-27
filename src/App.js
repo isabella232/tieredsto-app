@@ -1,11 +1,11 @@
-import React, { useContext, useEffect } from 'react';
+import React, { useContext, useEffect, Fragment, useState } from 'react';
 import {
   usePolymathSdk,
   useTokenSelector,
   User,
   Network,
 } from '@polymathnetwork/react';
-import { Layout, Spin, Alert } from 'antd';
+import { Layout, Spin, Alert, Button, Modal } from 'antd';
 
 import { Store } from './index';
 import STO from './STO';
@@ -73,7 +73,7 @@ function App() {
     tokens,
     tokenIndex,
   } = useTokenSelector(sdk, walletAddress);
-
+  const [launching, setLaunching] = useState(false);
   let { loading, loadingMessage, error, stos } = state.AppReducer;
   const token = tokens[tokenIndex];
 
@@ -170,7 +170,27 @@ function App() {
                 <Alert message={error} type="error" closable showIcon />
               )}
               {token && (
-                <STOForm walletAddress={walletAddress} launchSTO={launchSTO} />
+                <Fragment>
+                  <Button
+                    style={{ marginBottom: 20, alignSelf: 'flex-end' }}
+                    type="primary"
+                    onClick={() => setLaunching(true)}
+                  >
+                    LAUNCH TIERED STO
+                  </Button>
+                  <Modal
+                    title="Tiered STO"
+                    visible={launching}
+                    width={750}
+                    onOk={() => setLaunching(false)}
+                    onCancel={() => setLaunching(false)}
+                  >
+                    <STOForm
+                      walletAddress={walletAddress}
+                      launchSTO={launchSTO}
+                    />
+                  </Modal>
+                </Fragment>
               )}
               {stos && stos.map(sto => <STO key={sto.address} {...sto} />)}
             </Content>
