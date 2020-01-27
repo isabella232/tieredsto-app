@@ -1,0 +1,25 @@
+{
+  "files": {
+    "main.css": "/tieredsto-app/static/css/main.3b9fece1.chunk.css",
+    "main.js": "/tieredsto-app/static/js/main.4adbde90.chunk.js",
+    "main.js.map": "/tieredsto-app/static/js/main.4adbde90.chunk.js.map",
+    "runtime-main.js": "/tieredsto-app/static/js/runtime-main.d4b1c95a.js",
+    "runtime-main.js.map": "/tieredsto-app/static/js/runtime-main.d4b1c95a.js.map",
+    "static/css/2.c7b90ac4.chunk.css": "/tieredsto-app/static/css/2.c7b90ac4.chunk.css",
+    "static/js/2.f5bb1e18.chunk.js": "/tieredsto-app/static/js/2.f5bb1e18.chunk.js",
+    "static/js/2.f5bb1e18.chunk.js.map": "/tieredsto-app/static/js/2.f5bb1e18.chunk.js.map",
+    "index.html": "/tieredsto-app/index.html",
+    "precache-manifest.04f444ac6becef2f5f2358812e3ba8ed.js": "/tieredsto-app/precache-manifest.04f444ac6becef2f5f2358812e3ba8ed.js",
+    "service-worker.js": "/tieredsto-app/service-worker.js",
+    "static/css/2.c7b90ac4.chunk.css.map": "/tieredsto-app/static/css/2.c7b90ac4.chunk.css.map",
+    "static/css/main.3b9fece1.chunk.css.map": "/tieredsto-app/static/css/main.3b9fece1.chunk.css.map",
+    "static/js/2.f5bb1e18.chunk.js.LICENSE": "/tieredsto-app/static/js/2.f5bb1e18.chunk.js.LICENSE"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.d4b1c95a.js",
+    "static/css/2.c7b90ac4.chunk.css",
+    "static/js/2.f5bb1e18.chunk.js",
+    "static/css/main.3b9fece1.chunk.css",
+    "static/js/main.4adbde90.chunk.js"
+  ]
+}
