@@ -1,7 +1,8 @@
 {
-  "name": "dapp-boilerplate",
+  "name": "tieredsto-app",
   "version": "0.1.0",
   "private": true,
+  "homepage": "https://polymathnetwork.github.io/tieredsto-app/",
   "dependencies": {
     "@polymathnetwork/react": "https://github.com/PolymathNetwork/polymath-react",
     "@polymathnetwork/sdk": "2.0.1-beta.95",
