@@ -5,7 +5,7 @@
   "homepage": "https://polymathnetwork.github.io/tieredsto-app/",
   "dependencies": {
     "@polymathnetwork/react": "https://github.com/PolymathNetwork/polymath-react",
-    "@polymathnetwork/sdk": "2.0.1-beta.95",
+    "@polymathnetwork/sdk": "3.0.0",
     "antd": "^3.26.5",
     "gh-pages": "^2.1.1",
     "rc-form-hooks": "^0.0.1-beta.10",
